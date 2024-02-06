@@ -8,59 +8,8 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-data Demands = Demands { 
-    throttle :: Float 
-  , roll     :: Float 
-  , pitch    :: Float 
-  , yaw      :: Float 
-}
+import Types
 
-data State = State { 
-    x      :: Float 
-  , dx     :: Float 
-  , y      :: Float 
-  , dy     :: Float 
-  , z      :: Float 
-  , dz     :: Float 
-  , phi    :: Float 
-  , dphi   :: Float 
-  , theta  :: Float 
-  , dtheta :: Float 
-  , psi    :: Float 
-  , dpsi   :: Float 
-}
-
-data Motors = QuadMotors { 
-                       qm1 :: Float
-                     , qm2 :: Float  
-                     , qm3 :: Float  
-                     , qm4 :: Float   
-               } |
-
-              HexMotors {
-                    hm1 :: Float  
-                  , hm2 :: Float  
-                  , hm3 :: Float  
-                  , hm4 :: Float  
-                  , hm5 :: Float  
-                  , hm6 :: Float  
-               } deriving (Show)
-
-
-type Mixer = Demands -> Motors
-
-quadXAPMixer :: Mixer
-quadXAPMixer demands = 
-    let t = (throttle demands)
-        r = (roll demands)
-        p = (pitch demands)
-        y = (yaw demands)
-    in QuadMotors (t - r - p - y)
-                  (t + r + p - y)
-                  (t + r - p + y)
-                  (t - r + p + y)
- 
-------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 
 data Demands_ = Demands_ { 

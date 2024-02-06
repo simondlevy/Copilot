@@ -12,9 +12,6 @@ data Demands = Demands { throttle :: Float
                        , yaw :: Float  
                      } 
 
-demands :: Stream Demands
-demands = extern "demands" Nothing
-
 t :: Stream Float
 t  = extern "t" Nothing
 
@@ -48,7 +45,8 @@ spec = do
   let m3' = rescale mmax m3
   let m4' = rescale mmax m4
 
-  trigger "run" true [arg m1', arg m2', arg m3', arg m4'] 
+  -- trigger "run" true [arg m1', arg m2', arg m3', arg m4'] 
+  trigger "run" true [arg m1, arg m2, arg m3, arg m4] 
 
 -- Compile the spec
 main = reify spec >>= compile "copilot"

@@ -8,81 +8,82 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-------------------------------------------------------------------------------
-
 data Demands = Demands { 
-    throttle :: Field "throttle" Float 
-  , roll     :: Field "roll" Float 
-  , pitch    :: Field "pitch" Float 
-  , yaw      :: Field "yaw" Float 
+    throttle :: Float 
+  , roll     :: Float 
+  , pitch    :: Float 
+  , yaw      :: Float 
 }
 
-instance Struct Demands where
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+data Demands_ = Demands_ { 
+    throttle_ :: Field "throttle" Float 
+  , roll_     :: Field "roll" Float 
+  , pitch_    :: Field "pitch" Float 
+  , yaw_      :: Field "yaw" Float 
+}
+
+instance Struct Demands_ where
 
     typename _ = "demands" -- Name of the type in C
 
-    toValues v = [ Value Float (throttle v)
-                 , Value Float (roll v)
-                 , Value Float (pitch v)
-                 , Value Float (yaw v)
+    toValues v = [ Value Float (throttle_ v)
+                 , Value Float (roll_ v)
+                 , Value Float (pitch_ v)
+                 , Value Float (yaw_ v)
                  ]
 
-instance Typed Demands where
+instance Typed Demands_ where
 
-  typeOf = Struct (Demands (Field 0) (Field 0) (Field 0) (Field 0))
+  typeOf = Struct (Demands_ (Field 0) (Field 0) (Field 0) (Field 0))
 
-demands :: Stream Demands
+demands :: Stream Demands_
 demands = extern "demands" Nothing
 
-data Demandz = Demandz { 
-    throttlez :: Float 
-  , rollz     :: Float 
-  , pitchz    :: Float 
-  , yawz      :: Float 
-}
-
-convert :: Demands -> Demandz
-convert  (Demands (Field t) (Field r) (Field p) (Field y)) = 
-  Demandz t r p y
+convertDemands_ :: Demands_ -> Demands
+convertDemands_  (Demands_ (Field t) (Field r) (Field p) (Field y)) = 
+    Demands t r p y
 
 ------------------------------------------------------------------------------
 
-data State = State { 
-    x      :: Field "x" Float 
-  , dx     :: Field "dx" Float 
-  , y      :: Field "y " Float 
-  , dy     :: Field "dy" Float 
-  , z      :: Field "z" Float 
-  , dz     :: Field "dz" Float 
-  , phi    :: Field "phi" Float 
-  , dphi   :: Field "dphi" Float 
-  , theta  :: Field "theta" Float 
-  , dtheta :: Field "dtheta" Float 
-  , psi    :: Field "psi" Float 
-  , dpsi   :: Field "dpsi" Float 
+data State_ = State_ { 
+    x_      :: Field "x" Float 
+  , dx_     :: Field "dx" Float 
+  , y_      :: Field "y " Float 
+  , dy_     :: Field "dy" Float 
+  , z_      :: Field "z" Float 
+  , dz_     :: Field "dz" Float 
+  , phi_    :: Field "phi" Float 
+  , dphi_   :: Field "dphi" Float 
+  , theta_  :: Field "theta" Float 
+  , dtheta_ :: Field "dtheta" Float 
+  , psi_    :: Field "psi" Float 
+  , dpsi_   :: Field "dpsi" Float 
 }
 
-instance Struct State where
+instance Struct State_ where
 
     typename _ = "state" -- Name of the type in C
 
-    toValues v = [ Value Float (x v)
-                 , Value Float (dx v)
-                 , Value Float (y v)
-                 , Value Float (dy v)
-                 , Value Float (z v)
-                 , Value Float (dz v)
-                 , Value Float (phi v)
-                 , Value Float (dphi v)
-                 , Value Float (theta v)
-                 , Value Float (dtheta v)
-                 , Value Float (psi v)
-                 , Value Float (dpsi v)
+    toValues v = [ Value Float (x_ v)
+                 , Value Float (dx_ v)
+                 , Value Float (y_ v)
+                 , Value Float (dy_ v)
+                 , Value Float (z_ v)
+                 , Value Float (dz_ v)
+                 , Value Float (phi_ v)
+                 , Value Float (dphi_ v)
+                 , Value Float (theta_ v)
+                 , Value Float (dtheta_ v)
+                 , Value Float (psi_ v)
+                 , Value Float (dpsi_ v)
                  ]
 
-instance Typed State where
+instance Typed State_ where
 
-  typeOf = Struct (State 
+  typeOf = Struct (State_
                    (Field 0) 
                    (Field 0) 
                    (Field 0) 
@@ -97,10 +98,10 @@ instance Typed State where
                    (Field 0)
                   )
 
-state :: Stream State
+state :: Stream State_
 state = extern "state" Nothing
 
--------------------------------------------------------
+------------------------------------------------------------------------------
 
 data Motors = QuadMotors { 
                        qm1 :: Float
@@ -119,14 +120,14 @@ data Motors = QuadMotors {
                } deriving (Show)
 
 
-type Mixer = Demandz -> Motors
+type Mixer = Demands -> Motors
 
 quadXAPMixer :: Mixer
 quadXAPMixer demands = 
-    let t = (throttlez demands)
-        r = (rollz demands)
-        p = (pitchz demands)
-        y = (yawz demands)
+    let t = (throttle demands)
+        r = (roll demands)
+        p = (pitch demands)
+        y = (yaw demands)
     in QuadMotors (t - r - p - y)
                   (t + r + p - y)
                   (t + r - p + y)
@@ -135,10 +136,10 @@ quadXAPMixer demands =
 
 spec = do
 
-  let t = demands # throttle
-  let r = demands # roll
-  let p = demands # pitch
-  let y = demands # yaw
+  let t = demands # throttle_
+  let r = demands # roll_
+  let p = demands # pitch_
+  let y = demands # yaw_
 
   let m1 = t - r + p  - y
   let m2 = t - r - p  + y

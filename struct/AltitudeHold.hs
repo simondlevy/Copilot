@@ -10,6 +10,9 @@ import Demands
 import State
 import Clock
 
+smax :: Stream Float -> Stream Float -> Stream Float
+smax x y = if x > y then x else y
+
 type Controller = ClockRate -> State -> Demands -> Demands
 
 altitudePid :: Stream Float -> Stream Float -> Stream Float -> Stream Float
@@ -18,10 +21,11 @@ altitudePid dt desired measured = 0
 
   where kp = 2.0
         ki = 0.5
+        integralLimit = 5000.0
 
         error = desired - measured
 
-        errorIntegral = [0] ++ error
+        errorIntegral = smax ([0] ++ error) integralLimit
 
 altitudeHold :: Controller
 

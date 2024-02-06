@@ -8,25 +8,33 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-data Vec = Vec { x :: Field "x" Float , y :: Field "y" Float }
+data Demands = Demands { 
+    t :: Field "t" Float 
+  , r :: Field "r" Float 
+  , p :: Field "p" Float 
+  , y :: Field "y" Float 
+}
 
-instance Struct Vec where
+instance Struct Demands where
 
-    typename _ = "vec" -- Name of the type in C
+    typename _ = "demands" -- Name of the type in C
 
-    toValues v = [ Value Float (x v)
+    toValues v = [ Value Float (t v)
+                 , Value Float (r v)
+                 , Value Float (p v)
                  , Value Float (y v)
                  ]
 
-instance Typed Vec where
+instance Typed Demands where
 
-  typeOf = Struct (Vec (Field 0) (Field 0))
+  typeOf = Struct (Demands (Field 0) (Field 0) (Field 0) (Field 0))
 
-vecs :: Stream Vec
-vecs = [ Vec (Field 1) (Field 2) , Vec (Field 12) (Field 8) ] ++ vecs
+demands :: Stream Demands
+demands = extern "demands" Nothing
 
 spec = do
-  trigger "split" true [arg $ vecs # x, arg $ vecs # y]
+
+  trigger "split" true [arg $ demands # r, arg $ demands # p]
 
 -- Compile the spec
 main = reify spec >>= compile "copilot"

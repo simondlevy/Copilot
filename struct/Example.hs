@@ -15,6 +15,22 @@ data Demands = Demands {
   , yaw      :: Float 
 }
 
+data State = State { 
+    x      :: Float 
+  , dx     :: Float 
+  , y      :: Float 
+  , dy     :: Float 
+  , z      :: Float 
+  , dz     :: Float 
+  , phi    :: Float 
+  , dphi   :: Float 
+  , theta  :: Float 
+  , dtheta :: Float 
+  , psi    :: Float 
+  , dpsi   :: Float 
+}
+
+
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 
@@ -101,7 +117,24 @@ instance Typed State_ where
 state :: Stream State_
 state = extern "state" Nothing
 
-------------------------------------------------------------------------------
+convertState_ :: State_ -> State
+convertState_  (State_ (Field x) 
+                       (Field dx) 
+                       (Field y) 
+                       (Field dy)
+                       (Field z) 
+                       (Field dz)
+                       (Field phi) 
+                       (Field dphi)
+                       (Field theta) 
+                       (Field dtheta)
+                       (Field psi) 
+                       (Field dpsi)
+               ) = 
+
+    State x dx y dy z dz phi dphi theta dtheta psi dpsi
+
+-------------------------------------------------------------------------------
 
 data Motors = QuadMotors { 
                        qm1 :: Float

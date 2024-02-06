@@ -11,9 +11,7 @@ import State
 
 type Controller = State -> Demands -> Demands
 
-{--
 altitudeHold :: Controller
 altitudeHold state (Demands t r p y) = Demands t r p y
-  where x' = state # x
---}
+  where x' = x state
 

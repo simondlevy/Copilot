@@ -12,6 +12,7 @@ import Demands
 import State
 import Motors
 import Mixers
+import AltitudeHold
 
 demands :: Stream Demands
 demands = extern "demands" Nothing

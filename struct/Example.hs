@@ -8,41 +8,34 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-import Types
+-- import Types
 
 ------------------------------------------------------------------------------
 
-data Demands_ = Demands_ { 
-    throttle_ :: Field "throttle" Float 
-  , roll_     :: Field "roll" Float 
-  , pitch_    :: Field "pitch" Float 
-  , yaw_      :: Field "yaw" Float 
+data Demands = Demands { 
+    throttle :: Field "throttle" Float 
+  , roll     :: Field "roll" Float 
+  , pitch    :: Field "pitch" Float 
+  , yaw      :: Field "yaw" Float 
 }
 
-instance Struct Demands_ where
+instance Struct Demands where
 
     typename _ = "demands" -- Name of the type in C
 
-    toValues v = [ Value Float (throttle_ v)
-                 , Value Float (roll_ v)
-                 , Value Float (pitch_ v)
-                 , Value Float (yaw_ v)
+    toValues v = [ Value Float (throttle v)
+                 , Value Float (roll v)
+                 , Value Float (pitch v)
+                 , Value Float (yaw v)
                  ]
 
-instance Typed Demands_ where
+instance Typed Demands where
 
-  typeOf = Struct (Demands_ (Field 0) (Field 0) (Field 0) (Field 0))
-
-demands :: Stream Demands_
-demands = extern "demands" Nothing
-
-convertDemands_ :: Demands_ -> Demands
-convertDemands_  (Demands_ (Field t) (Field r) (Field p) (Field y)) = 
-    Demands t r p y
+  typeOf = Struct (Demands (Field 0) (Field 0) (Field 0) (Field 0))
 
 ------------------------------------------------------------------------------
 
-data State_ = State_ { 
+data State = State { 
     x_      :: Field "x" Float 
   , dx_     :: Field "dx" Float 
   , y_      :: Field "y " Float 
@@ -57,7 +50,7 @@ data State_ = State_ {
   , dpsi_   :: Field "dpsi" Float 
 }
 
-instance Struct State_ where
+instance Struct State where
 
     typename _ = "state" -- Name of the type in C
 
@@ -75,9 +68,9 @@ instance Struct State_ where
                  , Value Float (dpsi_ v)
                  ]
 
-instance Typed State_ where
+instance Typed State where
 
-  typeOf = Struct (State_
+  typeOf = Struct (State
                    (Field 0) 
                    (Field 0) 
                    (Field 0) 
@@ -92,43 +85,55 @@ instance Typed State_ where
                    (Field 0)
                   )
 
-state :: Stream State_
-state = extern "state" Nothing
+-------------------------------------------------------------------------------
 
-convertState_ :: State_ -> State
-convertState_  (State_ (Field x) 
-                       (Field dx) 
-                       (Field y) 
-                       (Field dy)
-                       (Field z) 
-                       (Field dz)
-                       (Field phi) 
-                       (Field dphi)
-                       (Field theta) 
-                       (Field dtheta)
-                       (Field psi) 
-                       (Field dpsi)
-               ) = 
+data Motors = QuadMotors { 
+                       qm1 :: Stream Float
+                     , qm2 :: Stream Float  
+                     , qm3 :: Stream Float  
+                     , qm4 :: Stream Float   
+               } |
 
-    State x dx y dy z dz phi dphi theta dtheta psi dpsi
+              HexMotors {
+                    hm1 :: Stream Float  
+                  , hm2 :: Stream Float  
+                  , hm3 :: Stream Float  
+                  , hm4 :: Stream Float  
+                  , hm5 :: Stream Float  
+                  , hm6 :: Stream Float  
+               } deriving (Show)
 
 -------------------------------------------------------------------------------
 
+mix :: Stream Demands -> Motors
+mix dmds = QuadMotors (dmds # throttle) (dmds # roll) (dmds # pitch) (dmds # yaw)
 
+demands :: Stream Demands
+demands = extern "demands" Nothing
+
+state :: Stream State
+state = extern "state" Nothing
 
 spec = do
 
-  let t = demands # throttle_
-  let r = demands # roll_
-  let p = demands # pitch_
-  let y = demands # yaw_
+  let t = demands # throttle
+  let r = demands # roll
+  let p = demands # pitch
+  let y = demands # yaw
 
   let m1 = t - r + p  - y
   let m2 = t - r - p  + y
   let m3 = t + r + p  + y
   let m4 = t + r - p  - y
 
-  trigger "run" true [arg m1, arg m2, arg m3, arg m4] 
+  let motors = mix demands
+
+  trigger "run" true [
+                       arg $ qm1 motors, 
+                       arg $ qm2 motors, 
+                       arg $ qm3 motors, 
+                       arg $ qm4 motors
+                     ] 
 
 -- Compile the spec
 main = reify spec >>= compile "copilot"

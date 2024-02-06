@@ -7,21 +7,6 @@ data Demands = Demands {
   , yaw      :: Float 
 }
 
-data State = State { 
-    x      :: Float 
-  , dx     :: Float 
-  , y      :: Float 
-  , dy     :: Float 
-  , z      :: Float 
-  , dz     :: Float 
-  , phi    :: Float 
-  , dphi   :: Float 
-  , theta  :: Float 
-  , dtheta :: Float 
-  , psi    :: Float 
-  , dpsi   :: Float 
-}
-
 data Motors = QuadMotors { 
                        qm1 :: Float
                      , qm2 :: Float  

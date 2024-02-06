@@ -57,5 +57,3 @@ instance Typed State where
                    (Field 0)
                    (Field 0)
                   )
-
-

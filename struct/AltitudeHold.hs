@@ -12,20 +12,24 @@ import Clock
 
 type Controller = ClockRate -> State -> Demands -> Demands
 
-altitudePid :: Stream Float -> Stream Float -> Stream Float
-altitudePid _ _ = 0
+altitudePid :: Stream Float -> Stream Float -> Stream Float -> Stream Float
+
+altitudePid dt desired measured = 0
+
+  where kp = 2.0
+        ki = 0.5
+
+        error = desired - measured
 
 altitudeHold :: Controller
 
 altitudeHold updateRate state (Demands thrust roll pitch yaw) = 
   Demands thrust roll pitch yaw
 
-  where altitudeKp = 2.0
-        altitudeKi = 0.5
-        climbRateKp = 25.0
+  where climbRateKp = 25.0
         climbRateKi = 15.0
 
         dt = rateToPeriod updateRate
         dz' = dz state
 
-        climbRate = altitudePid thrust (z state)
+        climbRate = altitudePid dt thrust (z state)

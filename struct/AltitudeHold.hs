@@ -11,4 +11,4 @@ import Prelude hiding ((>), (<), div, (++))
 import Demands
 import State
 
-type Controller = Stream Demands -> Stream State -> Stream Demands
+type Controller = Stream State -> Demands -> Demands

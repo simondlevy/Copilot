@@ -28,3 +28,9 @@ instance Struct Demands where
 instance Typed Demands where
 
   typeOf = Struct (Demands (Field 0) (Field 0) (Field 0) (Field 0))
+
+getDemands :: Stream Demands -> 
+                (Stream Float, Stream Float, Stream Float, Stream Float)
+getDemands demands = (demands # throttle, demands # roll, demands # pitch, demands # yaw)
+
+

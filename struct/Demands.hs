@@ -6,8 +6,6 @@ module Demands where
 import Language.Copilot
 import Copilot.Compile.C99
 
-import Prelude hiding ((>), (<), div, (++))
-
 data Demands' = Demands' { 
     throttle' :: Field "throttle" Float 
   , roll'     :: Field "roll" Float 

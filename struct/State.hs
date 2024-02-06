@@ -6,8 +6,6 @@ module State where
 import Language.Copilot
 import Copilot.Compile.C99
 
-import Prelude hiding ((>), (<), div, (++))
-
 data State' = State' { 
     x'      :: Field "x" Float 
   , dx'     :: Field "dx" Float 

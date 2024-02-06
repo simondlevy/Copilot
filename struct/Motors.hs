@@ -6,8 +6,6 @@ module Motors where
 import Language.Copilot
 import Copilot.Compile.C99
 
-import Prelude hiding ((>), (<), div, (++))
-
 data Motors = QuadMotors { 
                        qm1 :: Stream Float
                      , qm2 :: Stream Float  

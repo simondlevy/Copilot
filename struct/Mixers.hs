@@ -6,8 +6,6 @@ module Mixers where
 import Language.Copilot
 import Copilot.Compile.C99
 
-import Prelude hiding ((>), (<), div, (++))
-
 import Demands
 import Motors
 

@@ -34,6 +34,17 @@ instance Typed Demands where
 demands :: Stream Demands
 demands = extern "demands" Nothing
 
+data Demandz = Demandz { 
+    throttlez :: Float 
+  , rollz     :: Float 
+  , pitchz    :: Float 
+  , yawz      :: Float 
+}
+
+convert :: Demands -> Demandz
+convert  (Demands (Field t) (Field r) (Field p) (Field y)) = 
+  Demandz t r p y
+
 ------------------------------------------------------------------------------
 
 data State = State { 
@@ -89,7 +100,41 @@ instance Typed State where
 state :: Stream State
 state = extern "state" Nothing
 
-------------------------------------------------------------------------------
+-------------------------------------------------------
+
+data Motors = QuadMotors { 
+                       qm1 :: Float
+                     , qm2 :: Float  
+                     , qm3 :: Float  
+                     , qm4 :: Float   
+               } |
+
+              HexMotors {
+                    hm1 :: Float  
+                  , hm2 :: Float  
+                  , hm3 :: Float  
+                  , hm4 :: Float  
+                  , hm5 :: Float  
+                  , hm6 :: Float  
+               } deriving (Show)
+
+{-------------------------------------------------------
+
+type Mixer = Demands -> Motors
+
+quadXAPMixer :: Mixer
+quadXAPMixer demands = 
+    let t = (demands # throttle)
+        r = (demands # roll)
+        p = (demands # pitch)
+        y = (demands # yaw)
+    in QuadMotors (t - r - p - y)
+                  (t + r + p - y)
+                  (t + r - p + y)
+                  (t - r + p + y)
+ 
+
+------------------------------------------------------------------------------}
 
 spec = do
 

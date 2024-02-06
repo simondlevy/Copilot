@@ -15,6 +15,20 @@ data Demands = Demands {
   , yaw      :: Field "yaw" Float 
 }
 
+data StreamedDemands = StreamedDemands {
+
+     streamedThrottle :: Stream Float
+   , streamedRoll     :: Stream Float
+   , streamedPitch    :: Stream Float
+   , streamedYaw      :: Stream Float
+}
+
+liftDemands :: Stream Demands -> StreamedDemands
+liftDemands demands = StreamedDemands (demands # throttle) 
+                                      (demands # roll) 
+                                      (demands # pitch) 
+                                      (demands # yaw) 
+
 instance Struct Demands where
 
     typename _ = "demands" -- Name of the type in C

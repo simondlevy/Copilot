@@ -22,6 +22,8 @@ state = extern "state" Nothing
 
 spec = do
 
+  -- let demands' = altitudeHold state demands
+
   let motors = quadAPMixer demands
 
   trigger "run" true [

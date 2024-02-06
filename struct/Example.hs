@@ -22,9 +22,9 @@ state' = extern "state" Nothing
 
 spec = do
 
-  -- let demands' = altitudeHold state demands
-
   let demands = liftDemands demands'
+
+  -- let demands' = altitudeHold state demands
 
   let motors = quadAPMixer demands
 

@@ -14,8 +14,8 @@ import Motors
 import Mixers
 import AltitudeHold
 
-demands :: Stream Demands
-demands = extern "demands" Nothing
+demands' :: Stream Demands'
+demands' = extern "demands" Nothing
 
 state :: Stream State
 state = extern "state" Nothing
@@ -23,6 +23,8 @@ state = extern "state" Nothing
 spec = do
 
   -- let demands' = altitudeHold state demands
+
+  let demands = liftDemands demands'
 
   let motors = quadAPMixer demands
 

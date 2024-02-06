@@ -11,7 +11,7 @@ import Prelude hiding ((>), (<), div, (++))
 import Demands
 import Motors
 
-type Mixer = Stream Demands -> Motors
+type Mixer = Demands -> Motors
 
 quadAPMixer :: Mixer
 quadAPMixer demands = QuadMotors m1 m2 m3 m4

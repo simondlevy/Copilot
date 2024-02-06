@@ -8,43 +8,42 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-data Demands = Demands { 
-    throttle :: Field "throttle" Float 
-  , roll     :: Field "roll" Float 
-  , pitch    :: Field "pitch" Float 
-  , yaw      :: Field "yaw" Float 
+data Demands' = Demands' { 
+    throttle' :: Field "throttle" Float 
+  , roll'     :: Field "roll" Float 
+  , pitch'    :: Field "pitch" Float 
+  , yaw'      :: Field "yaw" Float 
 }
 
-data StreamedDemands = StreamedDemands {
+data Demands = Demands {
 
-     streamedThrottle :: Stream Float
-   , streamedRoll     :: Stream Float
-   , streamedPitch    :: Stream Float
-   , streamedYaw      :: Stream Float
+     throttle :: Stream Float
+   , roll     :: Stream Float
+   , pitch    :: Stream Float
+   , yaw      :: Stream Float
 }
 
-liftDemands :: Stream Demands -> StreamedDemands
-liftDemands demands = StreamedDemands (demands # throttle) 
-                                      (demands # roll) 
-                                      (demands # pitch) 
-                                      (demands # yaw) 
+liftDemands :: Stream Demands' -> Demands
+liftDemands demands = Demands (demands # throttle') 
+                              (demands # roll') 
+                              (demands # pitch') 
+                              (demands # yaw') 
 
-instance Struct Demands where
+instance Struct Demands' where
 
     typename _ = "demands" -- Name of the type in C
 
-    toValues v = [ Value Float (throttle v)
-                 , Value Float (roll v)
-                 , Value Float (pitch v)
-                 , Value Float (yaw v)
+    toValues v = [ Value Float (throttle' v)
+                 , Value Float (roll' v)
+                 , Value Float (pitch' v)
+                 , Value Float (yaw' v)
                  ]
 
-instance Typed Demands where
+instance Typed Demands' where
 
-  typeOf = Struct (Demands (Field 0) (Field 0) (Field 0) (Field 0))
+  typeOf = Struct (Demands' (Field 0) (Field 0) (Field 0) (Field 0))
 
-getDemands :: Stream Demands -> 
+getDemands :: Demands -> 
                 (Stream Float, Stream Float, Stream Float, Stream Float)
-getDemands demands = (demands # throttle, demands # roll, demands # pitch, demands # yaw)
 
-
+getDemands demands = (throttle demands, roll demands, pitch demands, yaw demands)

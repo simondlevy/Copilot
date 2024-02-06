@@ -15,17 +15,17 @@ import Mixers
 import Motors
 import State
 
-demands' :: Stream Demands'
-demands' = extern "demands" Nothing
+demandsStruct :: Stream DemandsStruct
+demandsStruct = extern "demands" Nothing
 
-state' :: Stream State'
-state' = extern "state" Nothing
+stateStruct :: Stream StateStruct
+stateStruct = extern "state" Nothing
 
 spec = do
 
   let motors = quadAPMixer $ altitudeHold  RATE_100_HZ 
-                                          (liftState state') 
-                                          (liftDemands demands')
+                                          (liftState stateStruct) 
+                                          (liftDemands demandsStruct)
 
   trigger "run" true [
                        arg $ qm1 motors, 

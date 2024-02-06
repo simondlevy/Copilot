@@ -6,7 +6,7 @@ module State where
 import Language.Copilot
 import Copilot.Compile.C99
 
-data State' = State' { 
+data StateStruct = StateStruct { 
     x'      :: Field "x" Float 
   , dx'     :: Field "dx" Float 
   , y'      :: Field "y " Float 
@@ -36,7 +36,7 @@ data State = State {
   , dpsi   :: Stream Float 
 }
 
-instance Struct State' where
+instance Struct StateStruct where
 
     typename _ = "state" -- Name of the type in C
 
@@ -54,9 +54,9 @@ instance Struct State' where
                  , Value Float (dpsi' v)
                  ]
 
-instance Typed State' where
+instance Typed StateStruct where
 
-  typeOf = Struct (State'
+  typeOf = Struct (StateStruct
                    (Field 0) 
                    (Field 0) 
                    (Field 0) 
@@ -71,7 +71,7 @@ instance Typed State' where
                    (Field 0)
                   )
 
-liftState :: Stream State' -> State
+liftState :: Stream StateStruct -> State
 liftState state = State (state # x') 
                         (state # dx') 
                         (state # y') 

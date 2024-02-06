@@ -105,8 +105,11 @@ data Motors = QuadMotors {
 
 -------------------------------------------------------------------------------
 
-mix :: Stream Demands -> Motors
-mix dmds = QuadMotors m1 m2 m3 m4
+type Mixer = Stream Demands -> Motors
+
+quadAPMixer :: Mixer
+
+quadAPMixer dmds = QuadMotors m1 m2 m3 m4
   where t = dmds # throttle
         r = dmds # roll
         p = dmds # pitch
@@ -124,17 +127,7 @@ state = extern "state" Nothing
 
 spec = do
 
-  let t = demands # throttle
-  let r = demands # roll
-  let p = demands # pitch
-  let y = demands # yaw
-
-  let m1 = t - r + p  - y
-  let m2 = t - r - p  + y
-  let m3 = t + r + p  + y
-  let m4 = t + r - p  - y
-
-  let motors = mix demands
+  let motors = quadAPMixer demands
 
   trigger "run" true [
                        arg $ qm1 motors, 

@@ -1,7 +1,7 @@
 all: copilot.c
 	wc -c copilot.c
 
-copilot.c: Example.hs
+copilot.c: Example.hs Demands.hs State.hs
 	runhaskell Example.hs
 	wc -c copilot.c
 

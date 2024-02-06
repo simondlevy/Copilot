@@ -8,7 +8,7 @@ import Copilot.Compile.C99
 
 import Prelude hiding ((>), (<), div, (++))
 
-data State = State { 
+data State' = State' { 
     x      :: Field "x" Float 
   , dx     :: Field "dx" Float 
   , y      :: Field "y " Float 
@@ -23,7 +23,7 @@ data State = State {
   , dpsi   :: Field "dpsi" Float 
 }
 
-instance Struct State where
+instance Struct State' where
 
     typename _ = "state" -- Name of the type in C
 
@@ -41,9 +41,9 @@ instance Struct State where
                  , Value Float (dpsi v)
                  ]
 
-instance Typed State where
+instance Typed State' where
 
-  typeOf = Struct (State
+  typeOf = Struct (State'
                    (Field 0) 
                    (Field 0) 
                    (Field 0) 

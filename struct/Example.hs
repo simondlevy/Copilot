@@ -17,8 +17,8 @@ import AltitudeHold
 demands' :: Stream Demands'
 demands' = extern "demands" Nothing
 
-state :: Stream State
-state = extern "state" Nothing
+state' :: Stream State'
+state' = extern "state" Nothing
 
 spec = do
 

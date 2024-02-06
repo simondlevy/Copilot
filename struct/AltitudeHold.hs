@@ -21,6 +21,8 @@ altitudePid dt desired measured = 0
 
         error = desired - measured
 
+        errorIntegral = [0] ++ error
+
 altitudeHold :: Controller
 
 altitudeHold updateRate state (Demands thrust roll pitch yaw) = 

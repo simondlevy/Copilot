@@ -14,4 +14,6 @@ import State
 type Controller = Stream State -> Demands -> Demands
 
 altitudeHold :: Controller
-altitudeHold _ (Demands t r p y) = Demands t r p y
+altitudeHold state (Demands t r p y) = Demands t r p y
+  where x' = state # x
+

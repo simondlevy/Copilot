@@ -9,36 +9,36 @@ import Copilot.Compile.C99
 import Prelude hiding ((>), (<), div, (++))
 
 data State = State { 
-    x_      :: Field "x" Float 
-  , dx_     :: Field "dx" Float 
-  , y_      :: Field "y " Float 
-  , dy_     :: Field "dy" Float 
-  , z_      :: Field "z" Float 
-  , dz_     :: Field "dz" Float 
-  , phi_    :: Field "phi" Float 
-  , dphi_   :: Field "dphi" Float 
-  , theta_  :: Field "theta" Float 
-  , dtheta_ :: Field "dtheta" Float 
-  , psi_    :: Field "psi" Float 
-  , dpsi_   :: Field "dpsi" Float 
+    x      :: Field "x" Float 
+  , dx     :: Field "dx" Float 
+  , y      :: Field "y " Float 
+  , dy     :: Field "dy" Float 
+  , z      :: Field "z" Float 
+  , dz     :: Field "dz" Float 
+  , phi    :: Field "phi" Float 
+  , dphi   :: Field "dphi" Float 
+  , theta  :: Field "theta" Float 
+  , dtheta :: Field "dtheta" Float 
+  , psi    :: Field "psi" Float 
+  , dpsi   :: Field "dpsi" Float 
 }
 
 instance Struct State where
 
     typename _ = "state" -- Name of the type in C
 
-    toValues v = [ Value Float (x_ v)
-                 , Value Float (dx_ v)
-                 , Value Float (y_ v)
-                 , Value Float (dy_ v)
-                 , Value Float (z_ v)
-                 , Value Float (dz_ v)
-                 , Value Float (phi_ v)
-                 , Value Float (dphi_ v)
-                 , Value Float (theta_ v)
-                 , Value Float (dtheta_ v)
-                 , Value Float (psi_ v)
-                 , Value Float (dpsi_ v)
+    toValues v = [ Value Float (x v)
+                 , Value Float (dx v)
+                 , Value Float (y v)
+                 , Value Float (dy v)
+                 , Value Float (z v)
+                 , Value Float (dz v)
+                 , Value Float (phi v)
+                 , Value Float (dphi v)
+                 , Value Float (theta v)
+                 , Value Float (dtheta v)
+                 , Value Float (psi v)
+                 , Value Float (dpsi v)
                  ]
 
 instance Typed State where

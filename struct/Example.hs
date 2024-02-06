@@ -118,23 +118,20 @@ data Motors = QuadMotors {
                   , hm6 :: Float  
                } deriving (Show)
 
-{-------------------------------------------------------
 
-type Mixer = Demands -> Motors
+type Mixer = Demandz -> Motors
 
 quadXAPMixer :: Mixer
 quadXAPMixer demands = 
-    let t = (demands # throttle)
-        r = (demands # roll)
-        p = (demands # pitch)
-        y = (demands # yaw)
+    let t = (throttlez demands)
+        r = (rollz demands)
+        p = (pitchz demands)
+        y = (yawz demands)
     in QuadMotors (t - r - p - y)
                   (t + r + p - y)
                   (t + r - p + y)
                   (t - r + p + y)
  
-
-------------------------------------------------------------------------------}
 
 spec = do
 

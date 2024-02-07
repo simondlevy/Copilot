@@ -39,11 +39,10 @@ climbRatePid desired measured = kp * error + ki * errorIntegral
 
 ------------------------------------------------------------------------------
 
-altitudeHold :: State -> Demands -> Demands
+altitudeHold :: State -> Demands
 
-altitudeHold state (Demands thrust roll pitch yaw) = 
-  Demands thrust' roll pitch yaw
+altitudeHold state  = Demands thrust' 0 0 0
 
-  where climbRate = altitudePid thrust (z state)
+  where climbRate = altitudePid 0 (z state)
 
         thrust' = climbRatePid climbRate (dz state)

@@ -1,6 +1,3 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE RebindableSyntax #-}
-
 module Main where
 
 import Language.Copilot
@@ -19,9 +16,9 @@ stateStruct = extern "state" Nothing
 
 spec = do
 
-  let demands = altitudeHold (liftState stateStruct) (liftDemands demandsStruct)
+  let demands = altitudeHold (liftState stateStruct) -- (liftDemands demandsStruct)
 
-  trigger "run" true [arg $ throttle demands]
+  trigger "run" true [arg $ thrust demands]
 
 -- Compile the spec
 main = reify spec >>= compile "copilot"

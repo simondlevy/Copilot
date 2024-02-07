@@ -21,11 +21,19 @@ instance Struct MyStruct where
 
     typename _ = "mystruct" -- Name of the type in C
 
-    toValues v = [ Value Float (x' v) , Value Float (y' v) , Value Float (z' v) ]
+    toValues v = [ 
+                   Value Float (x' v) , 
+                   Value Float (y' v) , 
+                   Value Float (z' v) 
+                 ]
 
 instance Typed MyStruct where
 
-  typeOf = Struct (MyStruct (Field 0) (Field 0) (Field 0))
+  typeOf = Struct (MyStruct 
+                     (Field 0) 
+                     (Field 0) 
+                     (Field 0)
+                  )
 
 liftMyData :: Stream MyStruct -> MyData
 liftMyData mydata = MyData (mydata # x') (mydata # y') (mydata # z') 

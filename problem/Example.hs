@@ -44,11 +44,14 @@ data MyData = MyData {
 mystruct :: Stream MyStruct
 mystruct = extern "mystruct" Nothing
 
+fun :: MyData -> Stream Float
+fun mydata = 2.0 * (z mydata)
+
 spec = do
 
   let mydata = MyData (mystruct # x') (mystruct # y') (mystruct # z') 
 
-  let value = z mydata
+  let value = fun mydata
 
   trigger "run" true [arg $ value]
 

@@ -16,7 +16,7 @@ stateStruct = extern "state" Nothing
 
 spec = do
 
-  let demands = altitudeHold (liftState stateStruct) -- (liftDemands demandsStruct)
+  let demands = fun1 (liftState stateStruct)
 
   trigger "run" true [arg $ thrust demands]
 

@@ -7,8 +7,6 @@ import Language.Copilot
 import Copilot.Compile.C99
 
 import Demands
-import Mixers
-import Motors
 import State
 
 import Problem
@@ -21,15 +19,9 @@ stateStruct = extern "state" Nothing
 
 spec = do
 
-  let motors = quadAPMixer $ altitudeHold (liftState stateStruct) 
-                                          (liftDemands demandsStruct)
+  let demands = altitudeHold (liftState stateStruct) (liftDemands demandsStruct)
 
-  trigger "run" true [
-                       arg $ qm1 motors, 
-                       arg $ qm2 motors, 
-                       arg $ qm3 motors, 
-                       arg $ qm4 motors
-                     ] 
+  trigger "run" true [arg $ throttle demands]
 
 -- Compile the spec
 main = reify spec >>= compile "copilot"

@@ -33,8 +33,8 @@ liftMyData mydata = MyData (mydata # x') (mydata # y') (mydata # z')
 fun3 :: Stream Float -> Stream Float
 fun3 a = a
 
-fun2 :: Stream Float -> Stream Float -> Stream Float
-fun2 b a = b - a
+fun2 :: Stream Float -> Stream Float
+fun2 a = a
 
 fun1 :: MyData -> Stream Float
 
@@ -42,7 +42,7 @@ fun1 mydata  = o2
 
   where o3 = fun3 (z mydata)
 
-        o2 = fun2 o3 (z mydata)
+        o2 = fun2 (z mydata)
 
 mydataStruct :: Stream MyStruct
 mydataStruct = extern "mydata" Nothing

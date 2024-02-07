@@ -19,46 +19,37 @@ data MyData = MyData {
 
 instance Struct MyStruct where
 
-    typename _ = "state" -- Name of the type in C
+    typename _ = "mystruct" -- Name of the type in C
 
-    toValues v = [ Value Float (x' v)
-                 , Value Float (y' v)
-                 , Value Float (z' v)
-                 ]
+    toValues v = [ Value Float (x' v) , Value Float (y' v) , Value Float (z' v) ]
 
 instance Typed MyStruct where
 
-  typeOf = Struct (MyStruct
-                   (Field 0)
-                   (Field 0)
-                   (Field 0)
-                  )
+  typeOf = Struct (MyStruct (Field 0) (Field 0) (Field 0))
 
 liftMyData :: Stream MyStruct -> MyData
-liftMyData state = MyData (state # x') 
-                        (state # y') 
-                        (state # z') 
+liftMyData mydata = MyData (mydata # x') (mydata # y') (mydata # z') 
 
 fun3 :: Stream Float -> Stream Float -> Stream Float
-fun3 desired measured = desired - measured
+fun3 b a = b - a
 
 fun2 :: Stream Float -> Stream Float -> Stream Float
-fun2 desired measured = desired - measured
+fun2 b a = b - a
 
 fun1 :: MyData -> Stream Float
 
-fun1 state  = o2
+fun1 mydata  = o2
 
-  where o3 = fun3 0 (z state)
+  where o3 = fun3 0 (z mydata)
 
-        o2 = fun2 o3 (z state)
+        o2 = fun2 o3 (z mydata)
 
-stateStruct :: Stream MyStruct
-stateStruct = extern "state" Nothing
+mydataStruct :: Stream MyStruct
+mydataStruct = extern "mydata" Nothing
 
 spec = do
 
-  let value = fun1 (liftMyData stateStruct)
+  let value = fun1 (liftMyData mydataStruct)
 
   trigger "run" true [arg $ value]
 

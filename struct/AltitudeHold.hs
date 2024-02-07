@@ -25,13 +25,14 @@ altitudePid dt desired measured = kp * error + ki * errorIntegral
 
         error = desired - measured
 
-        errorIntegral = smax ([0] ++ error) integralLimit
-         
+        errorIntegral = smax (errorIntegral' + error) integralLimit
+
+        errorIntegral' = [0] ++ errorIntegral
 
 altitudeHold :: Controller
 
 altitudeHold updateRate state (Demands thrust roll pitch yaw) = 
-  Demands thrust roll pitch yaw
+  Demands thrust' roll pitch yaw
 
   where climbRateKp = 25.0
         climbRateKi = 15.0
@@ -40,3 +41,5 @@ altitudeHold updateRate state (Demands thrust roll pitch yaw) =
         dz' = dz state
 
         climbRate = altitudePid dt thrust (z state)
+
+        thrust' = thrust

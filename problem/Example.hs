@@ -41,11 +41,8 @@ data MyData = MyData {
 
 ------------------------------------------------------------------
 
-fun2 :: Stream Float -> Stream Float
-fun2 a = a
-
-fun1 :: MyData -> Stream Float
-fun1 mydata  = fun2 (z mydata)
+fun :: MyData -> Stream Float
+fun mydata  = z mydata
 
 mystruct :: Stream MyStruct
 mystruct = extern "mydata" Nothing
@@ -54,7 +51,7 @@ spec = do
 
   let mydata = MyData (mystruct # x') (mystruct # y') (mystruct # z') 
 
-  let value = fun1 mydata
+  let value = fun mydata
 
   trigger "run" true [arg $ value]
 

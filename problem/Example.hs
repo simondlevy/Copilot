@@ -48,9 +48,7 @@ fun2 :: Stream Float -> Stream Float
 fun2 a = a
 
 fun1 :: MyData -> Stream Float
-fun1 mydata = o2
-
-  where o2 = fun2 (z mydata)
+fun1 mydata  = fun2 (z mydata)
 
 mydataStruct :: Stream MyStruct
 mydataStruct = extern "mydata" Nothing

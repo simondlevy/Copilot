@@ -5,19 +5,19 @@ module Main where
 import Language.Copilot
 import Copilot.Compile.C99
 
-data StateStruct = StateStruct { 
+data MyStruct = MyStruct { 
     x'      :: Field "x" Float 
   , y'      :: Field "y " Float 
   , z'      :: Field "z" Float 
 }
 
-data State = State { 
+data MyData = MyData { 
     x      :: Stream Float 
   , y      :: Stream Float 
   , z      :: Stream Float 
 }
 
-instance Struct StateStruct where
+instance Struct MyStruct where
 
     typename _ = "state" -- Name of the type in C
 
@@ -26,16 +26,16 @@ instance Struct StateStruct where
                  , Value Float (z' v)
                  ]
 
-instance Typed StateStruct where
+instance Typed MyStruct where
 
-  typeOf = Struct (StateStruct
+  typeOf = Struct (MyStruct
                    (Field 0)
                    (Field 0)
                    (Field 0)
                   )
 
-liftState :: Stream StateStruct -> State
-liftState state = State (state # x') 
+liftMyData :: Stream MyStruct -> MyData
+liftMyData state = MyData (state # x') 
                         (state # y') 
                         (state # z') 
 
@@ -45,7 +45,7 @@ fun3 desired measured = desired - measured
 fun2 :: Stream Float -> Stream Float -> Stream Float
 fun2 desired measured = desired - measured
 
-fun1 :: State -> Stream Float
+fun1 :: MyData -> Stream Float
 
 fun1 state  = o2
 
@@ -53,12 +53,12 @@ fun1 state  = o2
 
         o2 = fun2 o3 (z state)
 
-stateStruct :: Stream StateStruct
+stateStruct :: Stream MyStruct
 stateStruct = extern "state" Nothing
 
 spec = do
 
-  let value = fun1 (liftState stateStruct)
+  let value = fun1 (liftMyData stateStruct)
 
   trigger "run" true [arg $ value]
 

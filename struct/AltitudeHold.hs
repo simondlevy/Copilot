@@ -17,7 +17,7 @@ type Controller = ClockRate -> State -> Demands -> Demands
 
 altitudePid :: Stream Float -> Stream Float -> Stream Float -> Stream Float
 
-altitudePid dt desired measured = 0
+altitudePid dt desired measured = kp * error + ki * errorIntegral
 
   where kp = 2.0
         ki = 0.5
@@ -26,6 +26,7 @@ altitudePid dt desired measured = 0
         error = desired - measured
 
         errorIntegral = smax ([0] ++ error) integralLimit
+         
 
 altitudeHold :: Controller
 

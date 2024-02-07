@@ -22,9 +22,9 @@ instance Struct MyStruct where
     typename _ = "mystruct" -- Name of the type in C
 
     toValues v = [ 
-                   Value Float (x' v) , 
-                   Value Float (y' v) , 
-                   Value Float (z' v) 
+                    Value Float (x' v)
+                  , Value Float (y' v) 
+                  , Value Float (z' v) 
                  ]
 
 instance Typed MyStruct where

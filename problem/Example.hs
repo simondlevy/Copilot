@@ -8,14 +8,12 @@ import Copilot.Compile.C99
 data StateStruct = StateStruct { 
     x'      :: Field "x" Float 
   , y'      :: Field "y " Float 
-  , dy'     :: Field "dy" Float 
   , z'      :: Field "z" Float 
 }
 
 data State = State { 
     x      :: Stream Float 
   , y      :: Stream Float 
-  , dy     :: Stream Float 
   , z      :: Stream Float 
 }
 
@@ -25,7 +23,6 @@ instance Struct StateStruct where
 
     toValues v = [ Value Float (x' v)
                  , Value Float (y' v)
-                 , Value Float (dy' v)
                  , Value Float (z' v)
                  ]
 
@@ -35,13 +32,11 @@ instance Typed StateStruct where
                    (Field 0)
                    (Field 0)
                    (Field 0)
-                   (Field 0)
                   )
 
 liftState :: Stream StateStruct -> State
 liftState state = State (state # x') 
                         (state # y') 
-                        (state # dy') 
                         (state # z') 
 
 fun3 :: Stream Float -> Stream Float -> Stream Float

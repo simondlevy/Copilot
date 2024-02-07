@@ -5,16 +5,12 @@ module Main where
 import Language.Copilot
 import Copilot.Compile.C99
 
+-- Structure shared with C ---------------------------------------
+
 data MyStruct = MyStruct { 
     x'      :: Field "x" Float 
   , y'      :: Field "y " Float 
   , z'      :: Field "z" Float 
-}
-
-data MyData = MyData { 
-    x      :: Stream Float 
-  , y      :: Stream Float 
-  , z      :: Stream Float 
 }
 
 instance Struct MyStruct where
@@ -35,6 +31,16 @@ instance Typed MyStruct where
                      (Field 0)
                   )
 
+-- Structure used internally -------------------------------------
+
+data MyData = MyData { 
+    x      :: Stream Float 
+  , y      :: Stream Float 
+  , z      :: Stream Float 
+}
+
+------------------------------------------------------------------
+
 liftMyData :: Stream MyStruct -> MyData
 liftMyData mydata = MyData (mydata # x') (mydata # y') (mydata # z') 
 
@@ -42,8 +48,7 @@ fun2 :: Stream Float -> Stream Float
 fun2 a = a
 
 fun1 :: MyData -> Stream Float
-
-fun1 mydata  = o2
+fun1 mydata = o2
 
   where o2 = fun2 (z mydata)
 
